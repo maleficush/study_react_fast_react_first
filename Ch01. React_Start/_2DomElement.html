@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<div id="root"></div>
+
+<script type="text/babel">
+
+	const rootElement = document.getElementById("root");
+
+	// const element = React.createElement("h1", {
+	// 	className: "title",
+    // }, ["hello world???", "It's me", "Good"]);
+
+    // JSX를 이용
+    const text = "Hello world!";
+    const titleClassName = "title";
+    const props = {className: titleClassName, children: text}
+    // const customH1 =  <h1 className={titleClassName}>{text}</h1>;
+
+    // Spread 연산자를 이용한 props 적용
+    // const customH1 =  <h1 className={titleClassName} children="{text}"/>;
+    const customH1 =  <h1 {...props}/>;
+    const element = customH1;
+
+	ReactDOM.render(element, rootElement);
+</script>
+</body>
+</html>
