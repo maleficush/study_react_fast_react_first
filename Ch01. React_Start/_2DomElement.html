@@ -12,20 +12,77 @@
 
 	// const element = React.createElement("h1", {
 	// 	className: "title",
-    // }, ["hello world???", "It's me", "Good"]);
+	// }, ["hello world???", "It's me", "Good"]);
 
-    // JSX를 이용
-    const text = "Hello world!";
-    const titleClassName = "title";
-    const props = {className: titleClassName, children: text}
-    // const customH1 =  <h1 className={titleClassName}>{text}</h1>;
+	// JSX를 이용
+	const text = "Hello world!";
+	const titleClassName = "title";
+	const props = {className: titleClassName, children: text}
+	// const customH1 =  <h1 className={titleClassName}>{text}</h1>;
 
-    // Spread 연산자를 이용한 props 적용
-    // const customH1 =  <h1 className={titleClassName} children="{text}"/>;
-    const customH1 =  <h1 {...props}/>;
-    const element = customH1;
+	// Spread 연산자를 이용한 props 적용
+	// const customH1 =  <h1 className={titleClassName} children="{text}"/>;
+		// 1. React.Fragment를 이용한 부모 컨테이너를 이용
+		// <React.Fragment className="box" children={
+		//     [
+		//         React.createElement("h1", null, "Hi"),
+		//         React.createElement("h3", null, "Hi"),
+		//         React.createElement("h5", null, "Hi"),
+		//     ]}
+		// />
 
-	ReactDOM.render(element, rootElement);
+		// 2. 아래처럼 할 수도 있다.
+		// <React.Fragment className="box" children={
+		//     [
+		// 	    <h1>Hi</h1>,
+		// 	    <h3>Bye</h3>,
+		// 	    <h5>Hey</h5>,
+		//     ]}
+		// />
+
+        // 3. children 태그를 제외하고도 이용가능
+		// <React.Fragment className="box">
+		// 	<h1>Hi</h1>
+		// 	<h3>Bye</h3>
+		// 	<h5>Hey</h5>
+		// </React.Fragment>
+
+	    // 4. React.Fragment 태그도 생략 가능
+        // <>
+        //     <h1>Hi</h1>
+        //     <h3>Bye</h3>
+        //     <h5>Hey</h5>
+        // </>
+
+        const paint = (title, description) => (
+            <>
+                <h1>{title}</h1>
+                <h3>{description}</h3>
+            </>
+        );
+
+	    // props로 전달
+        const Paint = ({title, description, children}) => (
+            <>
+                <h1>{title}</h1>
+                <h3>{description}</h3>
+                { children }
+            </>
+        );
+        const Good = () => <h3>Child Good</h3>;
+
+        const element =
+            // 5. 외부 function 호출
+            <>
+                {paint('Good', 'good')}
+                <Paint title="Good" description="good">
+                    <Good/>
+                    <Good/>
+                    <Good/>
+                </Paint>
+            </>;
+
+	    ReactDOM.render(element, rootElement);
 </script>
 </body>
 </html>
