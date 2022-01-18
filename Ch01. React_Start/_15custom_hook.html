@@ -9,37 +9,37 @@
 <script type="text/babel">
     const rootElement = document.getElementById("root");
 
-    const App = () => {
-        // useState의 값이 바뀔때마다 계속 리렌더링이 된다.
-        console.log("render");
-
+    // value = "" : value의 값을 안넘겨주면 기본값으로 빈 스트링 셋팅, 넘어오면 그 값을 그냥 쓴다.
+    function useLocalStorage(itemName, value = ""){
         // 로컬 스토리지에 모델 저장
-        const [keyword, setKeyword] = React.useState(
+        const [state, setState] = React.useState(
             // function을 넣을 경우 이 function이 실행되고 나서 리턴하는 값으로 초기화 된다.
             // 즉 가져오는데 시간이 지연되는 값은 다음처럼 함수로 값을 가져오는 function을 통해
             //    state를 셋팅해주자.  -> lazy initialize
             () => {
                 console.log("initialize")
-                return window.localStorage.getItem("keyword");
+                return window.localStorage.getItem(itemName) || value;
             });
-
-        /**
-         * 위 코드는 아래와 같다.
-        const keywordState = React.useState("");
-        const keyword = keywordState[0];
-        const setKeyword = keywordState[1];
-        */
-        const [result, setResult] = React.useState("");
-        const [typing, setTyping] = React.useState(false);
-
 
         React.useEffect(() => {
             console.log('effect');
-            window.localStorage.setItem("keyword", keyword);
-        // 렌더될때 한번 호출되고
-        // 두번째 인자(state / dependency array)가 바뀔 때만 useEffect의 첫번째 콜백이 호출 된다.
-        // 만약, 빈배열이 넘어가면 모든 state가 변경될때마다 계속하여 useEffect의 콜백함수가 계속 호출된다.
-        }, [keyword, typing]);
+            window.localStorage.setItem(itemName, state);
+            // 렌더될때 한번 호출되고
+            // 두번째 인자(state / dependency array)가 바뀔 때만 useEffect의 첫번째 콜백이 호출 된다.
+            // 만약, 빈배열이 넘어가면 모든 state가 변경될때마다 계속하여 useEffect의 콜백함수가 계속 호출된다.
+        }, [state]);
+
+        return [state, setState];
+    }
+
+
+    const App = () => {
+        // useState의 값이 바뀔때마다 계속 리렌더링이 된다.
+        console.log("render");
+
+        const [keyword, setKeyword] = useLocalStorage("keyword");
+        const [result, setResult] = useLocalStorage("result");
+        const [typing, setTyping] = useLocalStorage("typing", false);
 
 
         function handleChange(event) {
